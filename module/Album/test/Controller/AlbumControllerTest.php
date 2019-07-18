@@ -10,15 +10,16 @@ namespace AlbumTest\Controller;
 use Album\Controller\AlbumController;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Album\Model\AlbumTable;
+use Zend\ServiceManager\ServiceManager;
 
 class AlbumControllerTest extends AbstractHttpControllerTestCase
 {
-    public function setUp()
+    
+    protected $albumTable;
+
+    public function setUp():void
     {
-        // The module configuration should still be applicable for tests.
-        // You can override configuration here with test case specific values,
-        // such as sample view templates, path stacks, module_listener_options,
-        // etc.
         $configOverrides = [];
 
         $this->setApplicationConfig(ArrayUtils::merge(
@@ -27,27 +28,52 @@ class AlbumControllerTest extends AbstractHttpControllerTestCase
         ));
 
         parent::setUp();
+
+        $this->configureServiceManager($this->getApplicationServiceLocator());
     }
 
     public function testIndexActionCanBeAccessed()
     {
-        $this->dispatch('/', 'GET');
+        $this->albumTable->fetchAll()->willReturn([]);
+
+        $this->dispatch('/album');
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('album');
-        $this->assertControllerName(IndexController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('IndexController');
-        $this->assertMatchedRouteName('home');
+        $this->assertModuleName('Album');
+        $this->assertControllerName(AlbumController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AlbumController');
+        $this->assertMatchedRouteName('album');
     }
 
-    public function testIndexActionViewModelTemplateRenderedWithinLayout()
-    {
-        $this->dispatch('/', 'GET');
-        $this->assertQuery('.container .jumbotron');
-    }
+    // public function testIndexActionViewModelTemplateRenderedWithinLayout()
+    // {
+    //     $this->dispatch('/album', 'GET');
+    //     $this->assertQuery('.table');
+    // }
 
     public function testInvalidRouteDoesNotCrash()
     {
         $this->dispatch('/invalid/route', 'GET');
         $this->assertResponseStatusCode(404);
+    }
+    protected function configureServiceManager(ServiceManager $services)
+    {
+        $services->setAllowOverride(true);
+
+        $services->setService('config', $this->updateConfig($services->get('config')));
+        $services->setService(AlbumTable::class, $this->mockAlbumTable()->reveal());
+
+        $services->setAllowOverride(false);
+    }
+
+    protected function updateConfig($config)
+    {
+        $config['db'] = [];
+        return $config;
+    }
+
+    protected function mockAlbumTable()
+    {
+        $this->albumTable = $this->prophesize(AlbumTable::class);
+        return $this->albumTable;
     }
 }

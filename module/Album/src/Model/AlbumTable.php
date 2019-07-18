@@ -3,10 +3,13 @@ namespace Album\Model;
 
 use RuntimeException;
 use Zend\Db\TableGateway\TableGatewayInterface;
+use Album\Model\AlbumTable;
+use Zend\ServiceManager\ServiceManager;
 
 class AlbumTable
 {
     private $tableGateway;
+    protected $albumTable;
 
     public function __construct(TableGatewayInterface $tableGateway)
     {
@@ -63,4 +66,6 @@ class AlbumTable
     {
         $this->tableGateway->delete(['id' => (int) $id]);
     }
+
+    
 }

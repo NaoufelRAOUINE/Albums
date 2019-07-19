@@ -1,6 +1,7 @@
 <?php
 namespace Album\Model;
 
+use Album\Controller;
 use DomainException;
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
@@ -99,4 +100,5 @@ class Album implements InputFilterAwareInterface
         $this->inputFilter = $inputFilter;
         return $this->inputFilter;
     }
+
 }

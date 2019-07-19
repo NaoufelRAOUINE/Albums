@@ -60,6 +60,8 @@ class AlbumController extends AbstractActionController
         $album->exchangeArray($form->getData());
         $this->table->saveAlbum($album);
         return $this->redirect()->toRoute('album');
+
+        
     }
 
     public function editAction()

@@ -11,7 +11,7 @@ use Zend\Paginator\Paginator;
 
 class AlbumTable
 {
-    private $tableGateway;
+    public $tableGateway;
     protected $albumTable;
 
     public function __construct(TableGatewayInterface $tableGateway)

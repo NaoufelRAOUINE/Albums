@@ -41,7 +41,9 @@ class AlbumManagerResource extends AbstractResourceListener
      */
     public function delete($id)
     {
+        var_export($id);
         $this->table->deleteAlbum($id);
+        return true;
     }
 
     /**
@@ -52,7 +54,8 @@ class AlbumManagerResource extends AbstractResourceListener
      */
     public function deleteList($data)
     {
-        return new ApiProblem(405, 'The DELETE method has not been defined for collections');
+        var_export($data);
+        //return new ApiProblem(405, 'The DELETE method has not been defined for collections');
     }
 
     /**
@@ -74,8 +77,8 @@ class AlbumManagerResource extends AbstractResourceListener
      */
     public function fetchAll($params = [])
     {   
-        var_export($params);
-        return $this->table->fetchAll($params);
+        var_dump($params);
+        return $this->table->tableGateway->select();
     }
 
     /**

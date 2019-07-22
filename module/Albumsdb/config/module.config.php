@@ -33,8 +33,11 @@ return array(
             'collection_http_methods' => array(
                 0 => 'GET',
                 1 => 'POST',
+                2 => 'DELETE',
             ),
-            'collection_query_whitelist' => array(),
+            'collection_query_whitelist' => array(
+                0 => 'title',
+            ),
             'page_size' => 25,
             'page_size_param' => null,
             'entity_class' => 'Albumsdb\\V1\\Rest\\AlbumManager\\AlbumManagerResource',
@@ -85,7 +88,11 @@ return array(
     'zf-apigility' => array(
         'db-connected' => array(),
     ),
-    'zf-content-validation' => array(),
+    'zf-content-validation' => array(
+        'Albumsdb\\V1\\Rest\\AlbumManager\\Controller' => array(
+            'input_filter' => 'Albumsdb\\V1\\Rest\\AlbumManager\\Validator',
+        ),
+    ),
     'input_filter_specs' => array(
         'Albumsdb\\V1\\Rest\\Album\\Validator' => array(
             0 => array(
@@ -107,6 +114,7 @@ return array(
                 'validators' => array(),
             ),
         ),
+        'Albumsdb\\V1\\Rest\\AlbumManager\\Validator' => array(),
     ),
     'service_manager' => array(
         'factories' => array(
